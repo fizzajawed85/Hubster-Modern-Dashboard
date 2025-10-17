@@ -6,5 +6,5 @@ export default defineConfig({
   build: {
     outDir: 'dist'
   },
-  base: './' // relative paths, nested routes me assets correctly load
+  base: '/' // absolute path ensures assets load on any nested route
 });
