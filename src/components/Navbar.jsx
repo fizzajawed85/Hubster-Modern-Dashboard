@@ -58,7 +58,7 @@ export default function Navbar({ setSidebarOpen }) {
         <div className="relative" ref={ref}>
           <button onClick={() => setOpen(o => !o)} className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-full bg-indigo-600 text-white grid place-items-center font-semibold">
-              {user ? user.email[0].toUpperCase() : 'JD'}
+              {user ? user.email[0].toUpperCase() : 'FJ'}
             </div>
             <svg
               className="w-4 h-4 text-gray-500 dark:text-gray-300"
