@@ -30,7 +30,7 @@ export default function Sidebar({ open, setOpen }) {
       <motion.div initial={false} animate={open ? { x: 0 } : { x: '-100%' }} className="fixed inset-y-0 left-0 z-40 md:hidden">
         <div className="w-72 h-full bg-white dark:bg-gray-800 border-r dark:border-gray-700 shadow-xl">
           <div className="p-4 flex items-center justify-between">
-            <div className="font-bold">My Dashboard</div>
+            <div className="font-bold">Hubster</div>
             <button onClick={() => setOpen(false)} className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Close</button>
           </div>
           <nav className="p-3 flex flex-col gap-1">
