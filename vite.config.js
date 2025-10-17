@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()], // lowercase 'react', same as import
+  plugins: [react()],
   build: {
     outDir: 'dist'
   },
-  base: '' // leave empty for Vercel SPA
+  base: './' // relative paths, nested routes me assets correctly load
 });
