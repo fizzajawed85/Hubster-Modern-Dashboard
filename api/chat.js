@@ -1,3 +1,4 @@
+// api/chat.js
 
 export default async function handler(req, res) {
   try {
@@ -5,38 +6,36 @@ export default async function handler(req, res) {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { prompt } = req.body || {};
+    // Extract body safely
+    const body = req.body || {};
+    const { prompt } = body;
+
     if (!prompt) {
       return res.status(400).json({ error: "Prompt missing" });
     }
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    // Call Gemini API
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+        }),
+      }
+    );
 
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-      }),
-    });
-
-    const textResponse = await response.text(); // safer than response.json()
-    let data;
-
-    try {
-      data = JSON.parse(textResponse);
-    } catch (jsonError) {
-      console.error("Non-JSON response from Gemini:", textResponse);
-      throw new Error("Invalid JSON response from Gemini API");
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("Gemini API error response:", errText);
+      return res.status(500).json({ error: "Gemini API error" });
     }
 
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No valid response from Gemini.";
-
-    return res.status(200).json({ reply });
+    const data = await response.json();
+    return res.status(200).json(data);
   } catch (err) {
     console.error("Internal API error:", err);
-    return res.status(500).json({ error: err.message || "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
